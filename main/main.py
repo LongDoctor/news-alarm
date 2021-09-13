@@ -52,29 +52,30 @@ def run(keyword, chat_id, token, sortType):
 
     while True:
         # for keyword in keywords:
-        for k in range(0, len(keywords)) :
-            keyword = keywords[k]
-            params = {"query":keyword, "display":common.displayNum, "start":common.startNum, "sort":sortType}
-            sess = requests.Session()
-            adapter = requests.adapters.HTTPAdapter(pool_connections=100, pool_maxsize=100)
-            sess.mount('https://', adapter)
-            r = sess.get(common.url, params= params, headers = common.headers)
-            j = r.json()
-            # current_HH = int(str(date.now())[11:13])
-            logger.debug("*************************************************************************")
-            # print_api_respones(j)
+        try:
+            for k in range(0, len(keywords)) :
+                keyword = keywords[k]
+                params = {"query":keyword, "display":common.displayNum, "start":common.startNum, "sort":sortType}
+                sess = requests.Session()
+                adapter = requests.adapters.HTTPAdapter(pool_connections=100, pool_maxsize=100)
+                sess.mount('https://', adapter)
+                r = sess.get(common.url, params= params, headers = common.headers)
+                j = r.json()
+                # current_HH = int(str(date.now())[11:13])
+                logger.debug("*************************************************************************")
+                # print_api_respones(j)
 
-            bot = telegram.Bot(token = token)
-            # updates = bot.getUpdates()
+                bot = telegram.Bot(token = token)
+                # updates = bot.getUpdates()
 
-            #텔레그램 메세지 명령어 받기
-            # for u in updates :
-            #     data = u.channel_post
-            #     if  data["text"]:
-            #         print(0)
+                #텔레그램 메세지 명령어 받기
+                # for u in updates :
+                #     data = u.channel_post
+                #     if  data["text"]:
+                #         print(0)
 
-            logger.info("k"+str(k)+" key "+keyword)
-            try:
+                # logger.info("k"+str(k)+" key "+keyword)
+               
                 for i in range(0, len(j["items"])) :
 
                     item = j["items"][i]
@@ -106,21 +107,22 @@ def run(keyword, chat_id, token, sortType):
                 # logger.debug("마지막 기사 시간 : " + str(tempTime))
                 time.sleep(common.thread_sleep_time)
 
+        except Exception as e:
 
-            except Exception as e:
+            logger.error(sys.exc_info()[0])
+            logger.error(e)
+            logger.error(token)
+            logger.error(chat_id)
+            logger.error(keyword)
+            sned_telegram_msg(token,chat_id,"ERROR_"+keyword+"._."+chat_id)
+            time.sleep(10)
+            continue
 
-                logger.error(sys.exc_info()[0])
-                logger.error(e)
-                logger.error(token)
-                logger.error(chat_id)
-                logger.error(keyword)
-                sned_telegram_msg(token,chat_id,"ERROR_"+keyword+"._."+chat_id)
-                time.sleep(10)
-                continue
+        finally :
+            sess.close()
 
-            finally :
-                sess.close()
-        index = index + 1
+                
+            index = index + 1
 
 keywords = common.keywords
 token = common.telgm_tokens

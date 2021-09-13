@@ -13,7 +13,7 @@ formatter = logging.Formatter(u'%(asctime)s [%(levelname)8s] %(message)s')
 logger.setLevel(logging.DEBUG)
 
 
-fileHandler = TimedRotatingFileHandler(filename='./logs/py_sched.log', when='midnight', interval=1, encoding='utf-8')
+fileHandler = TimedRotatingFileHandler(filename='../logs/news_alarm/py_sched.log', when='midnight', interval=1, encoding='utf-8')
 fileHandler.setFormatter(formatter)
 fileHandler.suffix = '%Y%m%d'
 fileHandler.setLevel(logging.DEBUG)

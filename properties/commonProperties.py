@@ -21,6 +21,13 @@ displayNum = 3
 startNum = 1
 headers = {'X-Naver-Client-Id':client_id, 'X-Naver-Client-Secret':client_secret}
 
+#TWITTER
+twitter_key = "lJs59PtRkRdFuoYui8Hf3k9NT"
+twitter_secret = "bTs8turR0OdflIAsiEexfRbcsMG2BXHOCu9NLplkC8ai7IkGHG"
+wtitter_bearer_token = "AAAAAAAAAAAAAAAAAAAAAEuxTgEAAAAAqMZ9Ikzcbl5GzU3xDYeyaNJ36Yc%3D0dK7qMMkGuoPyOEVtvuq3JgQY152V0KXzJaMSosconigG5dS2b"
+
+
 #common
 thread_sleep_time = 7 #초
 night_mode = True
+
