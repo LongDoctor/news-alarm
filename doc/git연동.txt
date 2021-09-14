@@ -1,0 +1,23 @@
+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
+
+
+
+git init
+git add .
+git status
+git commit -m "first commit"
+git remote add origin https://github.com/LongDoctor/news-alarm.git
+git push origin master
+-> fatal: unable to access 'https://github.com/LongDoctor/news-alarm.git/': The requested URL returned error: 403
+-> git remote set-url origin  https://LongDoctor@github.com/LongDoctor/news-alarm.git
+git push origin master
+
+
+
+git remote set-url origin https://github.com/LongDoctor/news-alarm.git
+
+
+git remote set-url origin  https://master@github.com/master/news-alarm.git
+
+
+

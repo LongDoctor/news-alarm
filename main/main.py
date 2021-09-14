@@ -1,7 +1,4 @@
-import logging
 import sys
-
-from telegram import chat
 sys.path.append("d:\\999_python\\news_alarm")
 print(sys.path)
 
@@ -123,7 +120,7 @@ def run(keyword, chat_id, token, sortType):
 
                 
             index = index + 1
-
+            time.sleep(10)
 keywords = common.keywords
 token = common.telgm_tokens
 chat_id = common.chat_ids

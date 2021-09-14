@@ -22,12 +22,13 @@ startNum = 1
 headers = {'X-Naver-Client-Id':client_id, 'X-Naver-Client-Secret':client_secret}
 
 #TWITTER
-twitter_key = "lJs59PtRkRdFuoYui8Hf3k9NT"
-twitter_secret = "bTs8turR0OdflIAsiEexfRbcsMG2BXHOCu9NLplkC8ai7IkGHG"
-wtitter_bearer_token = "AAAAAAAAAAAAAAAAAAAAAEuxTgEAAAAAqMZ9Ikzcbl5GzU3xDYeyaNJ36Yc%3D0dK7qMMkGuoPyOEVtvuq3JgQY152V0KXzJaMSosconigG5dS2b"
-
+twitter_consumer_key = "9HHQbZWGWwkAgbWlCmTifztBP"
+twitter_consumer_secret = "ig5IgOYX8HZkq7GJOSdqVGdANgu6HWhc3ryGHu0QdafsIQ1stb"  
+twitter_access_token = "1437559615114203136-a9e3fbgROm81TllBCqkViFQeiwFXiD"
+twitter_access_secret = "TGA9hi8Nr4Jw0ZhI3vMLaCeRmF6rylHPSr2nbpTZ2xraG"
+twitter_bearer_token = "AAAAAAAAAAAAAAAAAAAAAEuxTgEAAAAAPbFAk5lkaOXydtDVvTTEyAHmWbU%3De1Q3SnCtlbFzwTqc9ImCwN3S8SQcxUaAgNFhrojO0ZmE5iC80G"
 
 #common
-thread_sleep_time = 7 #초
+thread_sleep_time = 5 #초
 night_mode = True
 
