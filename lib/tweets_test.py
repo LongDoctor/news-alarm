@@ -3,12 +3,12 @@ sys.path.append("d:\\999_python\\news_alarm")
 print(sys.path)
 
 import twitter
-from properties import commonProperties as common
+from properties import commonProperties as config
 
-twitter_api = twitter.Api(consumer_key=common.twitter_consumer_key,
-                          consumer_secret=common.twitter_consumer_secret, 
-                          access_token_key=common.twitter_access_token, 
-                          access_token_secret=common.twitter_access_secret)
+twitter_api = twitter.Api(consumer_key=config.twitter_consumer_key,
+                          consumer_secret=config.twitter_consumer_secret, 
+                          access_token_key=config.twitter_access_token, 
+                          access_token_secret=config.twitter_access_secret)
 
 
 account = "@cz_binance"

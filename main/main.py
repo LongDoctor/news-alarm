@@ -3,15 +3,17 @@ sys.path.append("d:\\999_python\\news_alarm")
 print(sys.path)
 
 import requests
-from requests.adapters import HTTPAdapter
 import time
 import datetime
-from datetime import datetime as date
+from datetime import datetime as dt
 from dateutil.parser import parse
 import telegram
 import threading
-from properties import commonProperties as common
+from properties import commonProperties as config
 from lib.logger import logger
+from multiprocessing import Pool
+from lib.twitterCrawling import twitterCrawling
+import traceback
 
 # 패치
 # 야간모드
@@ -42,21 +44,20 @@ def run(keyword, chat_id, token, sortType):
 
     #Naver API Params
     index = 1 #처음 LOOP의 마지막 뉴스기사의 시간을 가져오기 위한 INDEX
-    cnt = 0
     
     #단일건로직
     pDateLIst = []
-
+    currentTime = parse(dt.now().strftime("%Y-%m-%d %H:%M:%S")+"+00:00")
     while True:
         # for keyword in keywords:
         try:
             for k in range(0, len(keywords)) :
                 keyword = keywords[k]
-                params = {"query":keyword, "display":common.displayNum, "start":common.startNum, "sort":sortType}
+                params = {"query":keyword, "display":config.displayNum, "start":config.startNum, "sort":sortType}
                 sess = requests.Session()
                 adapter = requests.adapters.HTTPAdapter(pool_connections=100, pool_maxsize=100)
                 sess.mount('https://', adapter)
-                r = sess.get(common.url, params= params, headers = common.headers)
+                r = sess.get(config.url, params= params, headers = config.headers)
                 j = r.json()
                 # current_HH = int(str(date.now())[11:13])
                 logger.debug("*************************************************************************")
@@ -82,27 +83,24 @@ def run(keyword, chat_id, token, sortType):
                 #   if(common.night_mode and (current_HH > 22 or current_HH < 7)):
                 #       continue
 
-                    if(index == 1):
-
-                        if(i == common.startNum-1):
-                            # tempTime = parsePDate
-                            logger.info("k " + str(k) + " i " +str(i) +" "+ keyword)
-                            pDateLIst.insert(k,parsePDate) #단일건
+                    if(index == 1 and i == config.startNum-1):
+                        # logger.info("k " + str(k) + " i " +str(i) +" "+ keyword)
+                        pDateLIst.insert(k,parsePDate) #단일건
+                        # sned_telegram_msg(bot,chat_id,msg)
                     
-                        sned_telegram_msg(bot,chat_id,msg)
-                        cnt = cnt + 1
-                    elif(parsePDate > pDateLIst[k]):
+                    if(parsePDate < currentTime):
+                        continue
 
+                    if(parsePDate > pDateLIst[k]):
                         sned_telegram_msg(bot,chat_id,msg)
                         # tempTime = parsePDate 
                         pDateLIst[k] = parsePDate #단일건
-                        cnt = cnt + 1
                     
-                logger.debug("index : {} ,keyword : {}, news : {}".format(index, keyword, cnt) +", 실행 시간 : "+str(datetime.timedelta(seconds=time.time()-start_time)).split(".")[0])
+                logger.debug("index : {} ,keyword : {}".format(index, keyword) +", 실행 시간 : "+str(datetime.timedelta(seconds=time.time()-start_time)).split(".")[0])
                 logger.debug("pDataList["+str(k)+"] : "+str(pDateLIst[k]))
                 # logger.debug("현재 뉴스 시간 : " + str(parsePDate))
                 # logger.debug("마지막 기사 시간 : " + str(tempTime))
-                time.sleep(common.thread_sleep_time)
+                time.sleep(config.thread_sleep_time)
 
         except Exception as e:
 
@@ -111,28 +109,38 @@ def run(keyword, chat_id, token, sortType):
             logger.error(token)
             logger.error(chat_id)
             logger.error(keyword)
+            logger.error(traceback.format_exc())
             sned_telegram_msg(token,chat_id,"ERROR_"+keyword+"._."+chat_id)
-            time.sleep(10)
+            time.sleep(120)
             continue
 
         finally :
             sess.close()
-
                 
             index = index + 1
-            time.sleep(10)
-keywords = common.keywords
-token = common.telgm_tokens
-chat_id = common.chat_ids
-sortType = common.sortTypes
-run(keywords,chat_id,token,sortType)
+            time.sleep(20)
 
-# for  i in range(0,len(common.telgm_nms)):
 
-#     chat_id = common.chat_ids[i]
-#     token = common.telgm_tokens[i]
-#     keywords = common.keywords[i]
-#     sortType = common.sortTypes[i]
+# 1 RUN twit
+twitter_1 = twitterCrawling(config.twit_telgm_tokens, config.twit_chat_ids)
+t1 = threading.Thread(target=twitter_1.run, args=())
+t1.start()
+
+# 2 RUN news
+keywords = config.keywords
+token = config.telgm_tokens
+chat_id = config.chat_ids
+sortType = config.sortTypes
+t2 = threading.Thread(target=run, args=(keywords, chat_id, token, sortType))
+t2.start()
+# run(keywords,chat_id,token,sortType)
+
+# for  i in range(0,len(config.telgm_nms)):
+
+#     chat_id = config.chat_ids[i]
+#     token = config.telgm_tokens[i]
+#     keywords = config.keywords[i]
+#     sortType = config.sortTypes[i]
 #     time.sleep(1)
 
 #     for keyword in keywords :

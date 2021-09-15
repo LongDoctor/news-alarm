@@ -7,6 +7,11 @@ chat_ids = "@newsalarm6203"
 # telgm_nms = ["NOMAL","MY","NOMAL","NOMAL"]
 # telgm_tokens = ["1958129912:AAFLQ0pn56FhI_fpyJCl8-opWQx6xpn2XOU","1958129912:AAFLQ0pn56FhI_fpyJCl8-opWQx6xpn2XOU","1958129912:AAFLQ0pn56FhI_fpyJCl8-opWQx6xpn2XOU","1958129912:AAFLQ0pn56FhI_fpyJCl8-opWQx6xpn2XOU"]
 # chat_ids = ["@newsalarm6203","@newsalarm6203","@newsalarm6203","@newsalarm6203"]
+twit_telgm_nms = "NOMAL"
+twit_telgm_tokens = "1942030266:AAG64BLjBFvatF4newdLIc0D3XhDS-Uuqio"
+twit_chat_ids = "@twit_alarm"
+
+
 
 #Naver API Params
 client_id = "ObqxYuxknqyCoMz1j7j8"
@@ -21,12 +26,19 @@ displayNum = 3
 startNum = 1
 headers = {'X-Naver-Client-Id':client_id, 'X-Naver-Client-Secret':client_secret}
 
+
+
+
 #TWITTER
 twitter_consumer_key = "9HHQbZWGWwkAgbWlCmTifztBP"
 twitter_consumer_secret = "ig5IgOYX8HZkq7GJOSdqVGdANgu6HWhc3ryGHu0QdafsIQ1stb"  
 twitter_access_token = "1437559615114203136-a9e3fbgROm81TllBCqkViFQeiwFXiD"
 twitter_access_secret = "TGA9hi8Nr4Jw0ZhI3vMLaCeRmF6rylHPSr2nbpTZ2xraG"
 twitter_bearer_token = "AAAAAAAAAAAAAAAAAAAAAEuxTgEAAAAAPbFAk5lkaOXydtDVvTTEyAHmWbU%3De1Q3SnCtlbFzwTqc9ImCwN3S8SQcxUaAgNFhrojO0ZmE5iC80G"
+twitter_accounts = ["@cz_binance","@elonmusk"]
+
+
+
 
 #common
 thread_sleep_time = 5 #초
