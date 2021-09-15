@@ -47,7 +47,8 @@ def run(keyword, chat_id, token, sortType):
     
     #단일건로직
     pDateLIst = []
-    currentTime = parse(dt.now().strftime("%Y-%m-%d %H:%M:%S")+"+00:00")
+    currentTime = parse((dt.now()-datetime.timedelta(minutes=30)).strftime("%Y-%m-%d %H:%M:%S")+"+09:00")
+    logger.debug("currentTime : " + str(currentTime))
     while True:
         # for keyword in keywords:
         try:
@@ -82,22 +83,26 @@ def run(keyword, chat_id, token, sortType):
 
                 #   if(common.night_mode and (current_HH > 22 or current_HH < 7)):
                 #       continue
-
                     if(index == 1 and i == config.startNum-1):
                         # logger.info("k " + str(k) + " i " +str(i) +" "+ keyword)
                         pDateLIst.insert(k,parsePDate) #단일건
                         # sned_telegram_msg(bot,chat_id,msg)
                     
                     if(parsePDate < currentTime):
+                        # logger.debug(parsePDate)
+                        # logger.debug(currentTime)
+                        # logger.debug("continue")
                         continue
 
-                    if(parsePDate > pDateLIst[k]):
+                    # logger.debug("parsePDate : " + str(parsePDate))
+                    # logger.debug("pDateLIst[k] : " + str(pDateLIst[k]))
+                    if(parsePDate >= pDateLIst[k]):
                         sned_telegram_msg(bot,chat_id,msg)
                         # tempTime = parsePDate 
                         pDateLIst[k] = parsePDate #단일건
                     
-                logger.debug("index : {} ,keyword : {}".format(index, keyword) +", 실행 시간 : "+str(datetime.timedelta(seconds=time.time()-start_time)).split(".")[0])
-                logger.debug("pDataList["+str(k)+"] : "+str(pDateLIst[k]))
+                logger.debug("[index : {} ,keyword : {}]".format(index, keyword) +", 실행 시간 : "+str(datetime.timedelta(seconds=time.time()-start_time)).split(".")[0])
+                logger.debug("[index : {} ,keyword : {}]".format(index, keyword) +", pDataList["+str(k)+"] : "+str(pDateLIst[k]))
                 # logger.debug("현재 뉴스 시간 : " + str(parsePDate))
                 # logger.debug("마지막 기사 시간 : " + str(tempTime))
                 time.sleep(config.thread_sleep_time)

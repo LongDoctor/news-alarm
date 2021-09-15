@@ -10,10 +10,7 @@ from dateutil.parser import parse
 from lib.logger import logger
 import threading
 import datetime as dt
-import pytz 
 import traceback
-
-utc=pytz.UTC
 
 
 class twitterCrawling(object):
@@ -30,15 +27,13 @@ class twitterCrawling(object):
         #@cz_binance
         #@binance
         logger.debug("==================================================================")
+        bot = telegram.Bot(token = self.token)
 
         # tmpCreatedAt = statuses[0].created_at
         index = 1
-        i = 0
-        bot = telegram.Bot(token = self.token)
-
         pDateLIst = []
 
-        currentTime = parse(dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S")+"+00:00")
+        currentTime = parse((dt.datetime.now()-dt.timedelta(hours=24)).strftime("%Y-%m-%d %H:%M:%S")+"+00:00")
         while True:
             try:
                 accounts = config.twitter_accounts
@@ -55,9 +50,14 @@ class twitterCrawling(object):
                         msg = "[twit_"+account+"] "+status.text
                         
                         if(index == 1 and j == 0):
-                            pDateLIst.insert(i,currentTime)
+                            pDateLIst.insert(i,createdAt)
 
+
+                        # logger.debug(currentTime)
+                        # logger.debug(createdAt)
+                        # logger.debug(pDateLIst[i])
                         if(createdAt < currentTime):
+                            # logger.debug("continue")
                             continue
 
                         if(createdAt > pDateLIst[i]):
@@ -65,8 +65,8 @@ class twitterCrawling(object):
                             logger.debug("########## : " + msg)
                             pDateLIst[i] = createdAt
 
-                    logger.debug("[" + account + "]["+str(status.id)+"] currentTime : " + str(currentTime))
-                    logger.debug("[" + account + "]["+str(status.id)+"] pDateLIst[i] : " + str(pDateLIst[i]))
+                    logger.debug("[" + account + "]["+str(status.id)+"] currentTime["+str(i)+"] : " + str(currentTime))
+                    logger.debug("[" + account + "]["+str(status.id)+"] pDateLIst["+str(i)+"] : " + str(pDateLIst[i]))
                     logger.debug("[" + account + "]["+str(status.id)+"] createdAt > currentTime : " + str(createdAt > pDateLIst[i]))
                     # logger.debug(status.text.encode('utf-8'))
                     time.sleep(5)
