@@ -1,5 +1,5 @@
 import sys
-sys.path.append("d:\\999_python\\news_alarm")
+sys.path.append("C:\\workspace\\news-alarm")
 print(sys.path)
 
 import twitter
@@ -48,7 +48,6 @@ class twitterCrawling(object):
                         status = statuses[j]
                         createdAt = parse(status.created_at)
                         msg = "[twit_"+account+"] "+status.text
-                        
                         if(index == 1 and j == 0):
                             pDateLIst.insert(i,createdAt)
 
@@ -64,10 +63,10 @@ class twitterCrawling(object):
                             bot.sendMessage(chat_id = self.chat_id, text=msg, timeout=30)
                             logger.debug("########## : " + msg)
                             pDateLIst[i] = createdAt
+                            logger.debug("[" + account + "]["+str(status.id)+"] currentTime["+str(i)+"] : " + str(currentTime))
+                            logger.debug("[" + account + "]["+str(status.id)+"] pDateLIst["+str(i)+"] : " + str(pDateLIst[i]))
+                            logger.debug("[" + account + "]["+str(status.id)+"] createdAt > currentTime : " + str(createdAt > pDateLIst[i]))
 
-                    logger.debug("[" + account + "]["+str(status.id)+"] currentTime["+str(i)+"] : " + str(currentTime))
-                    logger.debug("[" + account + "]["+str(status.id)+"] pDateLIst["+str(i)+"] : " + str(pDateLIst[i]))
-                    logger.debug("[" + account + "]["+str(status.id)+"] createdAt > currentTime : " + str(createdAt > pDateLIst[i]))
                     # logger.debug(status.text.encode('utf-8'))
                     time.sleep(5)
                 time.sleep(30)
@@ -76,6 +75,10 @@ class twitterCrawling(object):
                 logger.error(account)
                 logger.error(e)
                 logger.error(traceback.format_exc())
+                logger.debug("i : " + str(i))
+                logger.debug("j : " + str(j))
+                time.sleep(500)
+                continue
         logger.debug("3 ==================================================================")
         output_file_name = "twitter_get_timeline_result.txt"
         with open(output_file_name, "w", encoding="utf-8") as output_file:

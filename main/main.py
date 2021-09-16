@@ -1,5 +1,5 @@
 import sys
-sys.path.append("d:\\999_python\\news_alarm")
+sys.path.append("C:\\workspace\\news-alarm")
 print(sys.path)
 
 import requests
@@ -14,18 +14,6 @@ from lib.logger import logger
 from multiprocessing import Pool
 from lib.twitterCrawling import twitterCrawling
 import traceback
-
-# 패치
-# 야간모드
-# 최초 알림 시점, 현재시간보다 1일 전 데이터는 제외
-# 명령어 받기
-# 키워드 갯수에 맞게 쓰레드 분기처리(1 : 5)
-# 서버재시작시 이전기사 보내기 말기
-# 트위터 크롤링
-
-# 에러
-# 키워드별 쓰레드가 아닌 한 쓰레드(유저기준)에서 키워드가 루프돌도록
-# 'telegram.error.RetryAfter vlog.io/@gyunghoe/텔레그램-봇-성능-최적화하기
 
 def test(s):
     logger.debug(s)
@@ -61,7 +49,7 @@ def run(keyword, chat_id, token, sortType):
                 r = sess.get(config.url, params= params, headers = config.headers)
                 j = r.json()
                 # current_HH = int(str(date.now())[11:13])
-                logger.debug("*************************************************************************")
+                # logger.debug("*************************************************************************")
                 # print_api_respones(j)
 
                 bot = telegram.Bot(token = token)
@@ -79,7 +67,7 @@ def run(keyword, chat_id, token, sortType):
 
                     item = j["items"][i]
                     parsePDate = parse(item["pubDate"])
-                    msg = item["title"]+"\n "+item["link"]
+                    msg = "["+keyword+"]"+item["title"]+"\n "+item["link"]
 
                 #   if(common.night_mode and (current_HH > 22 or current_HH < 7)):
                 #       continue
@@ -96,13 +84,14 @@ def run(keyword, chat_id, token, sortType):
 
                     # logger.debug("parsePDate : " + str(parsePDate))
                     # logger.debug("pDateLIst[k] : " + str(pDateLIst[k]))
-                    if(parsePDate >= pDateLIst[k]):
+                    if(parsePDate > pDateLIst[k]):
                         sned_telegram_msg(bot,chat_id,msg)
                         # tempTime = parsePDate 
                         pDateLIst[k] = parsePDate #단일건
+                        logger.debug("*************************************************************************")
+                        logger.debug("[index : {} ,keyword : {}]".format(index, keyword) +", 실행 시간 : "+str(datetime.timedelta(seconds=time.time()-start_time)).split(".")[0])
+                        logger.debug("[index : {} ,keyword : {}]".format(index, keyword) +", pDataList["+str(k)+"] : "+str(pDateLIst[k]))
                     
-                logger.debug("[index : {} ,keyword : {}]".format(index, keyword) +", 실행 시간 : "+str(datetime.timedelta(seconds=time.time()-start_time)).split(".")[0])
-                logger.debug("[index : {} ,keyword : {}]".format(index, keyword) +", pDataList["+str(k)+"] : "+str(pDateLIst[k]))
                 # logger.debug("현재 뉴스 시간 : " + str(parsePDate))
                 # logger.debug("마지막 기사 시간 : " + str(tempTime))
                 time.sleep(config.thread_sleep_time)
