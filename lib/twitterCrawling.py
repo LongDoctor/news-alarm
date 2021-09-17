@@ -11,7 +11,8 @@ from lib.logger import logger
 import threading
 import datetime as dt
 import traceback
-
+import googletrans
+from googletrans import Translator
 
 class twitterCrawling(object):
     def __init__(self,token,chat_id):
@@ -34,6 +35,9 @@ class twitterCrawling(object):
         pDateLIst = []
 
         currentTime = parse((dt.datetime.now()-dt.timedelta(hours=24)).strftime("%Y-%m-%d %H:%M:%S")+"+00:00")
+        
+        translator = Translator()
+
         while True:
             try:
                 accounts = config.twitter_accounts
@@ -47,7 +51,8 @@ class twitterCrawling(object):
                         
                         status = statuses[j]
                         createdAt = parse(status.created_at)
-                        msg = "[twit_"+account+"] "+status.text
+                        msg = "[twit_"+account+"] " + status.text + "\n\n [구글번역]: " + translator.translate(str(status.text), src='en', dest='ko').text
+                        print(msg)
                         if(index == 1 and j == 0):
                             pDateLIst.insert(i,createdAt)
 
@@ -59,7 +64,7 @@ class twitterCrawling(object):
                             # logger.debug("continue")
                             continue
 
-                        if(createdAt > pDateLIst[i]):
+                        if(createdAt >= pDateLIst[i]):
                             bot.sendMessage(chat_id = self.chat_id, text=msg, timeout=30)
                             logger.debug("########## : " + msg)
                             pDateLIst[i] = createdAt
@@ -86,6 +91,6 @@ class twitterCrawling(object):
                 logger.debug(status, file=output_file)
 
 
-# twitter_1 = twitterCrawling(config.twit_telgm_tokens, config.twit_chat_ids)
-# t1 = threading.Thread(target=twitter_1.run, args=())
-# t1.start()
+twitter_1 = twitterCrawling(config.twit_telgm_tokens, config.twit_chat_ids)
+t1 = threading.Thread(target=twitter_1.run, args=())
+t1.start()
