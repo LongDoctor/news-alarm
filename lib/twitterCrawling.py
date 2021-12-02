@@ -1,5 +1,6 @@
 import sys
-sys.path.append("C:\\workspace\\news-alarm")
+# sys.path.append("C:\\workspace\\news-alarm")
+sys.path.append("D:\\999_python\\news_alarm")
 print(sys.path)
 
 import twitter
@@ -51,8 +52,8 @@ class twitterCrawling(object):
                         
                         status = statuses[j]
                         createdAt = parse(status.created_at)
-                        msg = "[twit_"+account+"] " + status.text + "\n\n [구글번역]: " + translator.translate(str(status.text), src='en', dest='ko').text
-                        print(msg)
+                        # msg = "[twit_"+account+"] " + status.text + "\n\n [구글번역]: " + translator.translate(str(status.text), src='en', dest='ko').text
+                        msg = "[twit_"+account+"] " + status.text
                         if(index == 1 and j == 0):
                             pDateLIst.insert(i,createdAt)
 
@@ -64,7 +65,7 @@ class twitterCrawling(object):
                             # logger.debug("continue")
                             continue
 
-                        if(createdAt >= pDateLIst[i]):
+                        if(createdAt > pDateLIst[i]):
                             bot.sendMessage(chat_id = self.chat_id, text=msg, timeout=30)
                             logger.debug("########## : " + msg)
                             pDateLIst[i] = createdAt
@@ -77,6 +78,8 @@ class twitterCrawling(object):
                 time.sleep(30)
                 index = index + 1
             except Exception as e:
+                logger.error(index)
+                logger.error(status.text)
                 logger.error(account)
                 logger.error(e)
                 logger.error(traceback.format_exc())
@@ -91,6 +94,6 @@ class twitterCrawling(object):
                 logger.debug(status, file=output_file)
 
 
-twitter_1 = twitterCrawling(config.twit_telgm_tokens, config.twit_chat_ids)
-t1 = threading.Thread(target=twitter_1.run, args=())
-t1.start()
+# twitter_1 = twitterCrawling(config.twit_telgm_tokens, config.twit_chat_ids)
+# t1 = threading.Thread(target=twitter_1.run, args=())
+# t1.start()

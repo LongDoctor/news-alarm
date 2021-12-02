@@ -1,5 +1,6 @@
 import sys
-sys.path.append("C:\\workspace\\news-alarm")
+# sys.path.append("C:\\workspace\\news-alarm")
+sys.path.append("D:\\999_python\\news_alarm")
 print(sys.path)
 
 import requests
@@ -23,11 +24,10 @@ def print_api_respones(log):
     logger.debug()
 
 def sned_telegram_msg(bot, chat_id, msg):
-    bot = telegram.Bot(token = token)
     bot.sendMessage(chat_id = chat_id, text=msg, timeout=30)
 
 # def run(keyword, chat_id, token, sortType):
-def run(keyword, chat_id, token, sortType):
+def run(keywords, chat_id, token, sortType):
     start_time = time.time()
 
     #Naver API Params
@@ -40,6 +40,16 @@ def run(keyword, chat_id, token, sortType):
     while True:
         # for keyword in keywords:
         try:
+            bot = telegram.Bot(token = token)
+            # updates = bot.getUpdates()
+
+            # 텔레그램 메세지 명령어 받기
+            # for u in updates :
+            #     data = u.channel_post
+            #     if  data["text"]:
+            #         print(0)
+
+            #1 keyword별 API 요청
             for k in range(0, len(keywords)) :
                 keyword = keywords[k]
                 params = {"query":keyword, "display":config.displayNum, "start":config.startNum, "sort":sortType}
@@ -52,17 +62,7 @@ def run(keyword, chat_id, token, sortType):
                 # logger.debug("*************************************************************************")
                 # print_api_respones(j)
 
-                bot = telegram.Bot(token = token)
-                # updates = bot.getUpdates()
-
-                #텔레그램 메세지 명령어 받기
-                # for u in updates :
-                #     data = u.channel_post
-                #     if  data["text"]:
-                #         print(0)
-
-                # logger.info("k"+str(k)+" key "+keyword)
-               
+                #2 keyword별 API 응답
                 for i in range(0, len(j["items"])) :
 
                     item = j["items"][i]
@@ -84,13 +84,15 @@ def run(keyword, chat_id, token, sortType):
 
                     # logger.debug("parsePDate : " + str(parsePDate))
                     # logger.debug("pDateLIst[k] : " + str(pDateLIst[k]))
+                    #3 텔레그램 메세지 전송
                     if(parsePDate > pDateLIst[k]):
                         sned_telegram_msg(bot,chat_id,msg)
                         # tempTime = parsePDate 
                         pDateLIst[k] = parsePDate #단일건
-                        logger.debug("*************************************************************************")
-                        logger.debug("[index : {} ,keyword : {}]".format(index, keyword) +", 실행 시간 : "+str(datetime.timedelta(seconds=time.time()-start_time)).split(".")[0])
-                        logger.debug("[index : {} ,keyword : {}]".format(index, keyword) +", pDataList["+str(k)+"] : "+str(pDateLIst[k]))
+                        #logger.debug("*************************************************************************")
+                        #logger.debug("[index : {} ,keyword : {}]".format(index, keyword) +", 실행 시간 : "+str(datetime.timedelta(seconds=time.time()-start_time)).split(".")[0])
+                        #logger.debug("[index : {} ,keyword : {}]".format(index, keyword) +", pDataList["+str(k)+"] : "+str(pDateLIst[k]))
+                        logger.debug("[index : {} ,keyword : {}]".format(index, keyword) +" : "+item["title"])
                     
                 # logger.debug("현재 뉴스 시간 : " + str(parsePDate))
                 # logger.debug("마지막 기사 시간 : " + str(tempTime))
@@ -118,15 +120,24 @@ def run(keyword, chat_id, token, sortType):
 # 1 RUN twit
 twitter_1 = twitterCrawling(config.twit_telgm_tokens, config.twit_chat_ids)
 t1 = threading.Thread(target=twitter_1.run, args=())
-t1.start()
+#t1.start()
 
 # 2 RUN news
 keywords = config.keywords
-token = config.telgm_tokens
 chat_id = config.chat_ids
+token = config.telgm_tokens
 sortType = config.sortTypes
 t2 = threading.Thread(target=run, args=(keywords, chat_id, token, sortType))
-t2.start()
+#t2.start()
+
+# 3 RUN news_my
+keywords_my = config.keywords_my
+chat_id_my = config.chat_ids_my
+token_my = config.telgm_tokens_my
+sortType_my = config.sortTypes
+t3 = threading.Thread(target=run, args=(keywords_my, chat_id_my, token_my, sortType_my))
+t3.start()
+
 # run(keywords,chat_id,token,sortType)
 
 # for  i in range(0,len(config.telgm_nms)):

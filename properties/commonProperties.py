@@ -4,6 +4,12 @@
 telgm_nms = "NOMAL"
 telgm_tokens = "1958129912:AAFLQ0pn56FhI_fpyJCl8-opWQx6xpn2XOU"
 chat_ids = "@newsalarm6203"
+
+telgm_nms_my = "NOMAL"
+telgm_tokens_my = "2022372478:AAEnCQ15sf9Cgtw-1e_BtS4I8aFMH9lzo5c"
+chat_ids_my = "@mynews_4422"
+
+
 # telgm_nms = ["NOMAL","MY","NOMAL","NOMAL"]
 # telgm_tokens = ["1958129912:AAFLQ0pn56FhI_fpyJCl8-opWQx6xpn2XOU","1958129912:AAFLQ0pn56FhI_fpyJCl8-opWQx6xpn2XOU","1958129912:AAFLQ0pn56FhI_fpyJCl8-opWQx6xpn2XOU","1958129912:AAFLQ0pn56FhI_fpyJCl8-opWQx6xpn2XOU"]
 # chat_ids = ["@newsalarm6203","@newsalarm6203","@newsalarm6203","@newsalarm6203"]
@@ -19,7 +25,8 @@ client_secret = "Qfl_AsGOFa"
 # keyword = ["속보"]
 # keywords = [["NFT","이더리움","메타버스","비트코인","비트토렌트"],["솔라나","폴카닷","에이다","넴"],["스택스","SEC","샌드박스","세럼"],["코인베이스","업비트","창펑자오","near"]]
 # sortTypes = ["date","date","date","sim"]
-keywords = ["NFT","이더리움","메타버스","비트코인","비트토렌트","솔라나","폴카닷","에이다","넴","스택스","SEC","샌드박스","세럼","코인베이스","업비트","창펑자오","near"]
+keywords = ["셧다운","헝다","에버그란데","NFT","이더리움","메타버스","비트코인","비트토렌트","솔라나","폴카닷","에이다","넴","스택스","SEC","샌드박스","세럼","코인베이스","업비트","창펑자오","near"]
+keywords_my = ["컬리","신테카바이오","케이씨피드","GKL","슈프리마아이디","백신여권","헝다","비트코인","셧다운","카지노","리오프닝","제이피모건","JP","오미크론"]
 sortTypes = "date"
 url = "https://openapi.naver.com/v1/search/news.json"
 displayNum = 3
